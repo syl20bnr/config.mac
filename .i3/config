@@ -45,20 +45,20 @@ font xft:Ubuntu bold  8
 floating_modifier $mod
 
 # no wast of pixels
-#hide_edge_borders both
+hide_edge_borders both
 
 # Special window properties
-for_window [class="Emacs"] border 1pixel
-for_window [instance=chromium-browser] border 1pixel
-for_window [title="yEd"] border 1pixel
-for_window [title="$term"] border 1pixel
-for_window [class="I3-exit"] floating enable; border 1pixel
+#for_window [class="Emacs"] border 1pixel
+#for_window [instance=chromium-browser] border 1pixel
+#for_window [title="yEd"] border 1pixel
+#for_window [title="$term"] border 1pixel
+#for_window [class="I3-exit"] floating enable; border 1pixel
 
 # i3 bar
 bar {
     id                      main
 #    status_command          i3status
-    position                bottom
+    position                top
     mode                    dock
     modifier                $mod
     workspace_buttons       yes
