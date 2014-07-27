@@ -1,0 +1,7 @@
+#!/usr/bin/env python
+# -*- mode: python coding: utf-8 -*-
+#
+# Description:
+# i3ci command line tool.
+import i3ci
+i3ci.main()

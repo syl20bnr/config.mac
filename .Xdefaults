@@ -1,0 +1,85 @@
+URxvt.perl-lib: /Users/sylvain/.urxvt/urxvt-perls
+URxvt.scrollBar: False
+URxvt.geometry: 80x24
+URxvt.font: xft:Monaco:size=11
+URxvt.perl-ext-common: default,keyboard-select,url-select,clipboard
+URxvt.keysym.M-Escape: perl:keyboard-select:activate
+URxvt.keysym.M-g: perl:keyboard-select:search
+URxvt.keysym.M-u: perl:url-select:select_next
+URxvt.url-select.underline: true
+Xft*dpi: 96
+Xft*antialias: true
+Xft*hinting: full
+URxvt.transparent: true
+URxvt.tintColor: white
+URxvt.shading: 18
+URxvt*fading: 32
+
+! ----------------------------------------------------------------------------
+!-- Solarized dark Color Scheme
+! ----------------------------------------------------------------------------
+!URxvt*background:            #002b36
+!
+!*background:              #002b36
+!*foreground:              #839496
+!*fading:                  40
+!*fadeColor:               #002b36
+!*cursorColor:             #93a1a1
+!*pointerColorBackground:  #586e75
+!*pointerColorForeground:  #93a1a1
+!
+!*color0:                  #073642
+!*color1:                  #dc322f
+!*color2:                  #859900
+!*color3:                  #b58900
+!*color4:                  #268bd2
+!*color5:                  #d33682
+!*color6:                  #2aa198
+!*color7:                  #eee8d5
+!*color9:                  #cb4b16
+!*color8:                  #002b36
+!*color10:                 #586e75
+!*color11:                 #657b83
+!*color12:                 #839496
+!*color13:                 #6c71c4
+!*color14:                 #93a1a1
+!*color15:                 #fdf6e3
+
+! ----------------------------------------------------------------------------
+!-- Tomorrow Color Scheme
+! ----------------------------------------------------------------------------
+! Names of the original color are in parenthesis.
+
+! With the exception of DarkYellow (which is Orange) and Yellow
+! (which is Yellow), bright colors were derived by simply upping the 'value'
+! of each color by 22.  This number was derived from maxing out the value on
+! Red.
+
+*foreground:   #efefef
+*background:   #000000
+! CursorColor (Selection)
+*cursorColor:  #d6d6d6
+! Black + Grey (Comment)
+*color0:       #000000
+*color8:       #8e908c
+! Red + Bright Red
+*color1:       #e82829
+*color9:       #ff3334
+! Green + Bright Green
+*color2:       #91Ac00
+*color10:      #AeD400
+! Yellow (Orange) + Bright Yellow (Yellow)
+*color3:       #f5871f
+*color11:      #eab700
+! Blue + Bright Blue
+*color4:       #4271ae
+*color12:      #5795e6
+! Magenta (Purple) + Bright Magenta
+*color5:       #8959a8
+*color13:      #b777e0
+! Cyan (Aqua) + Bright Cyan
+*color6:       #3e999f
+*color14:      #54ced6
+! Light Grey (Selection) + White (Current Line)
+*color7:       #d6d6d6
+*color15:      #efefef

@@ -1,0 +1,72 @@
+#!/usr/bin/env python
+# -*- mode: python -*-
+
+# based on cb-exit used in CrunchBang Linux <http://crunchbanglinux.org/>
+# original version: https://gist.github.com/jonyamo/5675359
+
+# Modified to remove all the UI stuff and bring some command line arguments.
+import os
+import argparse
+
+
+PARSER = argparse.ArgumentParser(prog='i3ci-exit')
+PARSER.add_argument('-l', '--logout',
+                    action='store_true',
+                    default=False,
+                    help='Logout from session.')
+PARSER.add_argument('-r', '--reboot',
+                    action='store_true',
+                    default=False,
+                    help='Reboot the computer.')
+PARSER.add_argument('-s', '--suspend',
+                    action='store_true',
+                    default=False,
+                    help='Suspend the session.')
+PARSER.add_argument('-S', '--shutdown',
+                    action='store_true',
+                    default=False,
+                    help='Shutdown the computer.')
+
+
+def logout_action():
+    print('Exiting i3, please standby...\n')
+    os.system('i3-msg exit')
+
+
+def suspend_action():
+    print('Suspending, please standby...\n')
+    os.system('i3-lock')
+    os.system('dbus-send --system --print-reply '
+              '--dest="org.freedesktop.UPower" '
+              '/org/freedesktop/UPower '
+              'org.freedesktop.UPower.Suspend')
+
+
+def reboot_action():
+    print('Rebooting, please standby...\n')
+    os.system('dbus-send --system --print-reply '
+              '--dest="org.freedesktop.ConsoleKit" '
+              '/org/freedesktop/ConsoleKit/Manager '
+              'org.freedesktop.ConsoleKit.Manager.Restart')
+
+
+def shutdown_action():
+    print('Shutting down, please standby...\n')
+    os.system('dbus-send --system --print-reply '
+              '--dest="org.freedesktop.ConsoleKit" '
+              '/org/freedesktop/ConsoleKit/Manager '
+              'org.freedesktop.ConsoleKit.Manager.Stop')
+
+
+if __name__ == "__main__":
+    args = PARSER.parse_args()
+    if args.logout:
+        logout_action()
+    elif args.suspend:
+        suspend_action()
+    elif args.reboot:
+        reboot_action()
+    elif args.shutdown:
+        shutdown_action()
+    else:
+        print('Error: you should provide at least one option, see i3-exit -h')

@@ -1,0 +1,1114 @@
+# syl20bnr i3 configuration
+#
+# i3 config file (v4)
+# Please see http://i3wm.org/docs/userguide.html for a complete reference!
+
+# ========================================================================
+#                          Configuration variables
+# ========================================================================
+
+set $mod       Mod1
+# terminal
+set $term      urxvt
+# navigation keys
+set $left      h
+set $right     l
+set $up        k
+set $down      j
+# Mode key bindings
+# quit any current mode
+set $quitmode  64
+set $quitmode2 108
+# Backspace go up in the hierarchy of modes
+set $upmode    22
+# help/auto-completion key
+set $help Tab
+
+# paths
+set $i3cibin ~/.i3ci/bin
+# force an update of the i3 status bar
+set $updatebar killall -USR1 i3status
+# wallpaper
+set $wallpaper feh --bg-fill ~/.img/green_mountains_in_the_morning-wallpaper-1280x800.jpg
+#set $wallpaper feh --bg-fill ~/.img/space_shuttle_discovery-wide.jpg
+
+# ========================================================================
+#                             System Preferences
+# ========================================================================
+
+# fix for nvidia twinview
+force_xinerama yes
+
+# font for window titles. ISO 10646 = Unicode
+font xft:Ubuntu bold  8
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# no wast of pixels
+#hide_edge_borders both
+
+# Special window properties
+for_window [class="Emacs"] border 1pixel
+for_window [instance=chromium-browser] border 1pixel
+for_window [title="yEd"] border 1pixel
+for_window [title="$term"] border 1pixel
+for_window [class="I3-exit"] floating enable; border 1pixel
+
+# i3 bar
+bar {
+    id                      main
+#    status_command          i3status
+    position                bottom
+    mode                    dock
+    modifier                $mod
+    workspace_buttons       yes
+    binding_mode_indicator  yes
+    tray_output             primary
+
+    colors {
+         background #002b36
+         statusline #93a1a1
+         separator  #586e75
+         focused_workspace  #859900 #859900 #eee8d5
+         active_workspace   #859900 #002b36 #657b83
+         inactive_workspace #073642 #002b36 #657b83
+         urgent_workspace   #002b36 #002b36 #dc322f
+    }
+}
+
+# class                  border  backgr. text    indicator
+client.urgent            #073642 #859900 #073642
+client.focused           #859900 #859900 #eee8d5
+client.focused_inactive  #859900 #002b36 #657b83
+client.unfocused         #073642 #002b36 #657b83
+
+# ========================================================================
+#                              Key Bindings
+# ========================================================================
+
+# refresh the i3bar when it appears
+# bindcode 64 exec $updatebar
+# bindcode 108 exec $updatebar
+# bindcode --release 64 rename workspace "1: emacs" to "4"
+# bindcode 64           rename workspace "4" to "1: emacs"
+
+bindsym $mod+$left            focus left
+bindsym $mod+$down            focus down
+bindsym $mod+$up              focus up
+bindsym $mod+$right           focus right
+bindsym $mod+shift+$left      move left
+bindsym $mod+shift+$down      move down
+bindsym $mod+shift+$up        move up
+bindsym $mod+shift+$right     move right
+bindsym $mod+Tab              workspace next_on_output
+bindsym $mod+shift+Tab        workspace prev_on_output
+bindsym $mod+shift+q          kill
+bindsym $mod+p                focus parent
+bindsym $mod+shift+p          focus child
+bindsym $mod+Return           fullscreen
+bindsym $mod+shift+Return     floating toggle
+bindsym $mod+semicolon        exec i3-input -P "i3-msg "
+bindsym $mod+shift+w          exec $i3ci_cmd/toggle_wks_names
+
+# explicitly call i3-msg to force the update of the tree
+bindsym $mod+0                exec $i3cibin/i3ci_cmd do focus_window 0
+bindsym $mod+1                exec $i3cibin/i3ci_cmd do focus_window 1
+bindsym $mod+2                exec $i3cibin/i3ci_cmd do focus_window 2
+bindsym $mod+3                exec $i3cibin/i3ci_cmd do focus_window 3
+bindsym $mod+4                exec $i3cibin/i3ci_cmd do focus_window 4
+bindsym $mod+5                exec $i3cibin/i3ci_cmd do focus_window 5
+bindsym $mod+6                exec $i3cibin/i3ci_cmd do focus_window 6
+bindsym $mod+7                exec $i3cibin/i3ci_cmd do focus_window 7
+bindsym $mod+8                exec $i3cibin/i3ci_cmd do focus_window 8
+bindsym $mod+9                exec $i3cibin/i3ci_cmd do focus_window 9
+
+# workspace bindings
+bindsym $mod+shift+0          workspace 0
+bindsym $mod+shift+1          workspace 1
+bindsym $mod+shift+2          workspace 2
+bindsym $mod+shift+3          workspace 3
+bindsym $mod+shift+4          workspace 4
+bindsym $mod+shift+5          workspace 5
+bindsym $mod+shift+6          workspace 6
+bindsym $mod+shift+7          workspace 7
+bindsym $mod+shift+8          workspace 8
+bindsym $mod+shift+9          workspace 9
+
+# ========================================================================
+#                                  Modes
+# ========================================================================
+
+set $default default
+
+set $mon1arg -m 0
+set $mon1output xinerama-0
+set $mon2arg -m 1
+set $mon2output xinerama-1
+
+# Mode: new  -------------------------------------------------------------
+
+# begin
+#   $mod+n: new | none
+#     a: application | exec $i3ci_cmd/i3ci_menu_run
+#       h: horizontal split | splith, exec $i3ci_cmd/i3ci_menu_run
+#       v: vertical split | splitv, exec $i3ci_cmd/i3ci_menu_run
+#       n: in new workspace | exec $i3ci_cmd/i3ci_menu_run --free
+#       #m: on monitor #m | exec $i3ci_cmd/i3ci_menu_run -m #m
+#         n: in new workspace | exec $i3ci_cmd/i3ci_menu_run -m #m --free 
+#     t: terminal | exec $i3ci_cmd/run -a $term
+#       h: horizontal split | splith, exec $i3ci_cmd/run -a $term
+#       v: vertical split | splitv, exec $i3ci_cmd/run -a $term
+#       n: n: in new workspace | exec $i3ci_cmd/run -a $term --free
+#       #m: on monitor #m | exec $i3ci_cmd/run -a $term -m #m
+#         n: in new workspace | exec $i3ci_cmd/run -a $term -m #m --free 
+#     w: workspace | none
+# end
+
+set $new_mode                   new
+
+mode "$new_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $default
+#    bindsym  $help              exec $menup/i3ci_menu_help -m new
+    bindsym         a           mode $new_app_mode
+    bindsym         t           mode $new_term_mode
+    bindsym         w           mode $new_wks_mode
+}
+bindsym $mod+n mode $new_mode
+
+# Mode: new application  -------------------------------------------------
+
+set $new_app_mode               new application
+set $new_app_new_mode           new application in a new workspace
+set $new_app_v_mode             new application vertical split
+set $new_app_h_mode             new application horizontal split
+set $new_app_mon1_mode          new application on monitor 1
+set $new_app_mon1_new_mode      new application on monitor 1 in a new workspace
+set $new_app_mon2_mode          new application on monitor 2
+set $new_app_mon2_new_mode      new application on monitor 2 in a new workspace
+
+mode "$new_app_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $new_mode
+    bindsym         1           mode $new_app_mon1_mode
+    bindsym         2           mode $new_app_mon2_mode
+    bindsym         n           mode $new_app_new_mode
+    bindsym         h           mode $new_app_h_mode
+    bindsym         v           mode $new_app_v_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu start_application
+}
+
+mode "$new_app_new_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $new_app_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu start_application --new
+}
+
+mode "$new_app_v_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $new_app_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      splitv, exec $i3cibin/i3ci_cmd menu start_application
+}
+
+mode "$new_app_h_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $new_app_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      splith, exec $i3cibin/i3ci_cmd menu start_application
+}
+
+mode "$new_app_mon1_mode" {
+    # - - - - - - - - - - - - - - sub modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $new_app_mode
+    bindsym         n           mode $new_app_mon1_new_mode
+    # - - - - - - - - - - - - - -  key map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu start_application $mon1arg
+}
+
+mode "$new_app_mon1_new_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $new_app_mon1_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu start_application $mon1arg --new
+}
+
+mode "$new_app_mon2_mode" {
+    # - - - - - - - - - - - - - - sub modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $new_app_mode
+    bindsym         n           mode $new_app_mon2_new_mode
+    # - - - - - - - - - - - - - -  key map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu start_application $mon2arg --new
+}
+
+mode "$new_app_mon2_new_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $new_app_mon2_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu start_application $mon2arg --new
+}
+
+# Mode: new terminal  ----------------------------------------------------
+
+set $new_term_mode               new terminal
+set $new_term_new_mode           new terminal in a new workspace
+set $new_term_v_mode             new terminal vertical split
+set $new_term_h_mode             new terminal horizontal split
+set $new_term_mon1_mode          new terminal on monitor 1
+set $new_term_mon1_new_mode      new terminal on monitor 1 in a new workspace
+set $new_term_mon2_mode          new terminal on monitor 2
+set $new_term_mon2_new_mode      new terminal on monitor 2 in a new workspace
+
+mode "$new_term_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $new_mode
+    bindsym         1           mode $new_term_mon1_mode
+    bindsym         2           mode $new_term_mon2_mode
+    bindsym         n           mode $new_term_new_mode
+    bindsym         v           mode $new_term_v_mode
+    bindsym         h           mode $new_term_h_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do start_application -a $term
+}
+
+mode "$new_term_new_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $new_term_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do start_application -a $term --new
+}
+
+mode "$new_term_h_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $new_term_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      splith, exec $i3cibin/i3ci_cmd do start_application -a $term
+}
+
+mode "$new_term_v_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $new_term_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      splitv, exec $i3cibin/i3ci_cmd do start_application -a $term
+}
+
+mode "$new_term_mon1_mode" {
+    # - - - - - - - - - - - - - - sub modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $new_term_mode
+    bindsym         n           mode $new_term_mon1_new_mode
+    # - - - - - - - - - - - - - -  key map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do start_application -a $term $mon1arg
+}
+
+mode "$new_term_mon1_new_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $new_term_mon1_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do start_application -a $term $mon1arg --new
+}
+
+mode "$new_term_mon2_mode" {
+    # - - - - - - - - - - - - - - sub modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $new_term_mode
+    bindsym         n           mode $new_term_mon2_new_mode
+    # - - - - - - - - - - - - - -  key map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do start_application -a $term $mon2arg
+}
+
+mode "$new_term_mon2_new_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $new_term_mon2_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do start_application -a $term $mon2arg --new
+}
+
+# Mode: clone  -----------------------------------------------------------
+
+set $clone_mode                 clone
+set $clone_new_mode             clone in a new workspace
+set $clone_v_mode               clone vertical split
+set $clone_h_mode               clone horizontal split
+set $clone_mon1_mode            clone on monitor 1
+set $clone_mon1_new_mode        clone on monitor 1 in a new workspace
+set $clone_mon2_mode            clone on monitor 2
+set $clone_mon2_new_mode        clone on monitor 2 in a new workspace
+
+mode "$clone_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $default
+    bindsym         1           mode $clone_mon1_mode
+    bindsym         2           mode $clone_mon2_mode
+    bindsym         h           mode $clone_h_mode
+    bindsym         n           mode $clone_new_mode
+    bindsym         v           mode $clone_v_mode
+    # - - - - - - - - - - - - - -  key map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do clone_window
+}
+bindsym $mod+c mode $clone_mode
+
+mode "$clone_new_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $clone_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do clone_window --new
+}
+
+mode "$clone_h_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $clone_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      splith, exec $i3cibin/i3ci_cmd do clone_window
+}
+
+mode "$clone_v_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $clone_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      splitv, exec $i3cibin/i3ci_cmd do clone_window
+}
+
+mode "$clone_mon1_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $clone_mode
+    bindsym         n           mode $clone_mon1_new_mode
+    # - - - - - - - - - - - - - -  key map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do clone_window $mon1arg
+}
+
+mode "$clone_mon1_new_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $clone_mon1_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do clone_window $mon1arg --new
+}
+
+mode "$clone_mon2_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $clone_mode
+    bindsym         n           mode $clone_mon2_new_mode
+    # - - - - - - - - - - - - - -  key map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do clone_window $mon2arg
+}
+
+mode "$clone_mon2_new_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $clone_mon2_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do clone_window $mon2arg --new
+}
+
+# Mode: goto -------------------------------------------------------------
+
+set $goto_mode                       go to
+set $goto_mon1_mode                  go to monitor 1
+set $goto_mon2_mode                  go to monitor 2
+set $goto_app_mode                   go to application
+set $goto_app_mon1_mode              go to application on monitor 1
+set $goto_app_mon2_mode              go to application on monitor 2
+set $goto_term_mode                  go to terminal
+set $goto_term_mon1_mode             go to terminal on monitor 1
+set $goto_term_mon2_mode             go to terminal on monitor 2
+set $goto_wks_mode                   go to workspace
+set $goto_wks_back_and_forth_mode    go to workspace back and forth
+set $goto_wks_mon1_mode              go to workspace on monitor 1
+set $goto_wks_mon2_mode              go to workspace on monitor 2
+
+mode "$goto_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $default
+    bindsym         1           mode $goto_mon1_mode
+    bindsym         2           mode $goto_mon2_mode
+    bindsym         a           mode $goto_app_mode
+    bindsym         Return      mode $default
+    bindsym         t           mode $goto_term_mode
+    bindsym         w           mode $goto_wks_mode
+}
+bindsym $mod+g mode $goto_mode
+
+mode "$goto_mon1_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $goto_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do focus_active_workspace $mon1arg
+}
+
+mode "$goto_mon2_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $goto_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do focus_active_workspace $mon2arg
+}
+
+mode "$goto_app_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $goto_mode
+    bindsym         1           mode $goto_app_mon1_mode
+    bindsym         2           mode $goto_app_mon2_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu jump_to_window
+}
+
+mode "$goto_app_mon1_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $goto_app_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu jump_to_window $mon1arg
+}
+
+mode "$goto_app_mon2_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $goto_app_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu jump_to_window $mon2arg
+}
+
+mode "$goto_term_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $goto_mode
+    bindsym         1           mode $goto_term_mon1_mode
+    bindsym         2           mode $goto_term_mon2_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu jump_to_window -i $term
+}
+
+mode "$goto_term_mon1_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $goto_term_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu jump_to_window -i $term $mon1arg
+}
+
+mode "$goto_term_mon2_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $goto_term_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu jump_to_window -i $term $mon2arg
+}
+
+mode "$goto_wks_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $goto_mode
+    bindsym         1           mode $goto_wks_mon1_mode
+    bindsym         2           mode $goto_wks_mon2_mode
+    bindsym         b           mode $goto_wks_back_and_forth_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu jump_to_workspace
+}
+
+mode "$goto_wks_back_and_forth_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $goto_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      workspace back_and_forth, mode $default
+}
+
+mode "$goto_wks_mon1_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $goto_wks_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu jump_to_workspace $mon1arg
+}
+
+mode "$goto_wks_mon2_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $goto_wks_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu jump_to_workspace $mon2arg
+}
+
+# Mode: send -------------------------------------------------------------
+
+set $send_mode                   send
+
+set $send_app_mode               send application
+set $send_app_new_mode           send application to a new workspace
+set $send_app_to_app_mode        send application next to application
+set $send_app_to_wks_mode        send application to workspace
+set $send_app_mon1_mode          send application to monitor 1
+set $send_app_mon1_new_mode      send application to monitor 1 on a new workspace
+set $send_app_to_app_mon1_mode   send application to monitor 1 next to application
+set $send_app_to_wks_mon1_mode   send application to monitor 1 on workspace
+set $send_app_mon2_mode          send application to monitor 2
+set $send_app_mon2_new_mode      send application to monitor 2 on a new workspace
+set $send_app_to_app_mon2_mode   send application to monitor 2 next to application
+set $send_app_to_wks_mon2_mode   send application to monitor 2 on workspace
+
+set $send_container_mode         send container
+set $send_container_mon1_mode    send container to monitor 1
+set $send_container_mon2_mode    send container to monitor 2
+
+# set $mode_wks_mode               send workspace
+
+mode "$send_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Return             mode $default
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $default
+    bindsym         a           mode $send_app_mode
+    bindsym         c           focus parent, mode $send_container_mode
+}
+bindsym $mod+s mode $send_mode
+
+mode "$send_app_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Return             mode $default
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $send_mode
+    bindsym         1           mode $send_app_mon1_mode
+    bindsym         2           mode $send_app_mon2_mode
+    bindsym         a           mode $send_app_to_app_mode
+    bindsym         n           mode $send_app_new_mode
+    bindsym         w           mode $send_app_to_wks_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         b           move to workspace back_and_forth, mode $default
+}
+
+mode "$send_app_to_app_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $send_app_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu send_window_to_window
+}
+
+mode "$send_app_new_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $send_app_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do send_window_to_new_workspace
+}
+
+mode "$send_app_to_wks_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $send_app_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu send_window_to_workspace
+}
+
+mode "$send_app_mon1_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $send_app_mode
+    bindsym         a           mode $send_app_to_app_mon1_mode
+    bindsym         n           mode $send_app_mon1_new_mode
+    bindsym         w           mode $send_app_to_wks_mon1_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do send_window_to_monitor $mon1arg
+}
+
+mode "$send_app_to_app_mon1_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $send_app_mon1_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu send_window_to_window $mon1arg
+}
+
+mode "$send_app_mon1_new_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $send_app_mon1_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do send_window_to_new_workspace $mon1arg
+}
+
+mode "$send_app_to_wks_mon1_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $send_app_mon1_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu send_window_to_workspace $mon1arg
+}
+
+mode "$send_app_mon2_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $send_app_mode
+    bindsym         a           mode $send_app_to_app_mon2_mode
+    bindsym         n           mode $send_app_mon2_new_mode
+    bindsym         w           mode $send_app_to_wks_mon2_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do send_window_to_monitor $mon2arg
+}
+
+mode "$send_app_to_app_mon2_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $send_app_mon2_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu send_window_to_window $mon2arg
+}
+
+mode "$send_app_mon2_new_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $send_app_mon2_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do send_window_to_new_workspace $mon2arg
+}
+
+mode "$send_app_to_wks_mon2_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $send_app_mon2_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu send_window_to_workspace $mon2arg
+}
+
+mode "$send_container_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Return             focus child, mode $default
+    bindsym  Escape             focus child, mode $default
+    bindcode $quitmode          focus child, mode $default
+    bindcode $quitmode2         focus child, mode $default
+    bindcode $upmode            focus child, mode $send_mode
+    bindsym         1           mode $send_container_mon1_mode
+    bindsym         2           mode $send_container_mon2_mode
+}
+
+mode "$send_container_mon1_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $send_container_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do send_window_to_monitor $mon1arg
+}
+
+mode "$send_container_mon2_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $send_container_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd do send_window_to_monitor $mon2arg
+}
+
+# Mode: bring  -------------------------------------------------------------
+
+set $bring_mode                  bring
+
+set $bring_app_mode              bring application
+set $bring_app_v_mode            bring application vertical split
+set $bring_app_h_mode            bring application horizontal split
+set $bring_app_mon1_mode         bring application from monitor 1
+set $bring_app_mon1_v_mode       bring application from monitor 1 vertical split
+set $bring_app_mon1_h_mode       bring application from monitor 1 horizontal split
+set $bring_app_mon2_mode         bring application from monitor 2
+set $bring_app_mon2_v_mode       bring application from monitor 2 vertical split
+set $bring_app_mon2_h_mode       bring application from monitor 2 horizontal split
+
+# set $bring_workspace_mode        bring workspace
+
+mode "$bring_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Return             mode $default
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $default
+    bindsym         a           mode $bring_app_mode
+}
+bindsym $mod+b mode $bring_mode
+
+mode "$bring_app_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $bring_mode
+    bindsym         1           mode $bring_app_mon1_mode
+    bindsym         2           mode $bring_app_mon2_mode
+    bindsym         h           mode $bring_app_h_mode
+    bindsym         v           mode $bring_app_v_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu bring_window
+}
+
+mode "$bring_app_h_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $bring_app_mode
+    bindsym         v           mode $bring_app_v_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      splith, exec $i3cibin/i3ci_cmd menu bring_window
+}
+
+mode "$bring_app_v_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $bring_app_mode
+    bindsym         h           mode $bring_app_h_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      splitv, exec $i3cibin/i3ci_cmd menu bring_window
+}
+
+mode "$bring_app_mon1_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $bring_app_mode
+    bindsym         2           mode $bring_app_mon2_mode
+    bindsym         h           mode $bring_app_mon1_h_mode
+    bindsym         v           mode $bring_app_mon1_v_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu bring_window $mon1arg
+}
+
+mode "$bring_app_mon1_h_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $bring_app_mon1_mode
+    bindsym         v           mode $bring_app_mon1_v_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      splith, exec $i3cibin/i3ci_cmd menu bring_window $mon1arg
+}
+
+mode "$bring_app_mon1_v_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $bring_app_mon1_mode
+    bindsym         h           mode $bring_app_mon1_h_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      splitv, exec $i3cibin/i3ci_cmd menu bring_window $mon1arg
+}
+
+mode "$bring_app_mon2_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $bring_app_mode
+    bindsym         1           mode $bring_app_mon1_mode
+    bindsym         h           mode $bring_app_mon2_h_mode
+    bindsym         v           mode $bring_app_mon2_v_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $i3cibin/i3ci_cmd menu bring_window $mon2arg
+}
+
+mode "$bring_app_mon2_h_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $bring_app_mon2_mode
+    bindsym         v           mode $bring_app_mon2_v_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      splith, exec $i3cibin/i3ci_cmd menu bring_window $mon2arg
+}
+
+mode "$bring_app_mon2_v_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $bring_app_mon2_mode
+    bindsym         h           mode $bring_app_mon2_h_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      splitv, exec $i3cibin/i3ci_cmd menu bring_window $mon2arg
+}
+
+# Mode: functions --------------------------------------------------------
+
+set $func_mode              functions
+set $func_exit_mode         functions -> exit
+set $func_sound_mode        functions -> sound
+set $func_display_mode      functions -> display
+set $func_display_work_mode functions -> display at work
+set $func_display_mac_mode  functions -> display for macbook air
+set $func_resize_mode       functions -> resize window
+set $func_layout_mode       functions -> layout
+
+mode "$func_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Return             mode $default
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $default
+    bindsym         d           mode $func_display_mode
+    bindsym         e           mode $func_exit_mode, exec $i3cibin/i3ci_cmd menu system
+    bindsym         l           mode $func_layout_mode
+    bindsym   shift+l           exec i3lock, mode $default
+    bindsym         r           mode $func_resize_mode
+    bindsym   shift+r           exec $wallpaper, restart
+    bindsym         s           mode $func_sound_mode
+}
+bindsym $mod+f mode $func_mode
+
+mode "$func_exit_mode" {}
+
+mode "$func_layout_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Return             mode $default
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $func_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         d           layout default, mode $default
+    bindsym         h           splith, mode $default
+    bindsym         s           layout stacking, mode $default
+    bindsym         t           layout tabbed, mode $default
+    bindsym   shift+t           layout toggle split, mode $default
+    bindsym         v           splitv, mode $default
+}
+
+mode "$func_resize_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Return             mode $default
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $func_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         $left       resize grow    left 2 px or 2 ppt
+    bindsym   shift+$left       resize shrink  left 2 px or 2 ppt
+    bindsym         $down       resize grow    down 2 px or 2 ppt
+    bindsym   shift+$down       resize shrink  down 2 px or 2 ppt
+    bindsym         $up         resize grow      up 2 px or 2 ppt
+    bindsym   shift+$up         resize shrink    up 2 px or 2 ppt
+    bindsym         $right      resize grow   right 2 px or 2 ppt
+    bindsym   shift+$right      resize shrink right 2 px or 2 ppt
+}
+
+mode "$func_sound_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Return             mode $default
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $func_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         $up         exec "amixer -q set Master 2dB+ unmute; $updatebar"
+    bindsym         $down       exec "amixer -q set Master 2dB- unmute; $updatebar"
+    bindsym         m           exec "amixer -q set Master toggle; $updatebar"
+}
+
+mode "$func_display_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Return             mode $default
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $func_mode
+    bindsym         w           mode $func_display_work_mode
+    bindsym         m           mode $func_display_mac_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         c           exec xrandr --output DVI1 --auto --same-as LVDS1
+    bindsym         d           exec xrandr --output DVI1 --auto --right-of LVDS1
+    bindsym         l           exec xrandr --output DVI1 --auto --left-of LVDS1
+    bindsym         r           exec xrandr --output DVI1 --auto --right-of LVDS1
+}
+
+mode "$func_display_work_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Return             mode $default
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $func_display_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         c           exec xrandr --output DVI-I-2 --auto --same-as DVI-I-3
+    bindsym         l           exec xrandr --output DVI-I-2 --auto --left-of DVI-I-3
+    bindsym         r           exec xrandr --output DVI-I-2 --auto --right-of DVI-I-3
+}
+
+mode "$func_display_mac_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Return             mode $default
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $func_display_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         c           exec xrandr --output VBOX0 --auto --same-as VBOX1
+    bindsym         d           exec xrandr --output VBOX0 --auto --left-of VBOX1
+    bindsym         l           exec xrandr --output VBOX0 --auto --left-of VBOX1
+    bindsym         r           exec xrandr --output VBOX0 --auto --right-of VBOX1
+}
+
+# Mode: logout -----------------------------------------------------------
+
+set $confirm_logout_mode           confirm logout ?
+set $confirm_suspend_mode          confirm suspend ?
+set $confirm_reboot_mode           confirm reboot ?
+set $confirm_shutdown_mode         confirm shutdown ?
+
+mode "$confirm_logout_mode" {}
+mode "$confirm_suspend_mode" {}
+mode "$confirm_reboot_mode" {}
+mode "$confirm_shutdown_mode" {}
+
+# ========================================================================
+#                                    Startup
+# ========================================================================
+
+exec --no-startup-id unclutter
+exec --no-startup-id dunst
+exec --no-startup-id gnome-settings-daemon
+exec --no-startup-id $wallpaper
+
+# home
+#exec --no-startup-id u1sdtool --start
+#exec --no-startup-id /usr/lib/indicator-ubuntuone/indicator-ubuntuone
+
+# work
+#exec --no-startup-id synergys --no-tray --daemon
+#exec --no-startup-id /home/sbenner/.mouse_sens.sh

@@ -1,0 +1,3 @@
+[submodule ".oh-my-fish"]
+	path = .oh-my-fish
+	url = http://github.com/bpinto/oh-my-fish

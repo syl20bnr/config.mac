@@ -1,0 +1,7 @@
+[user]
+	email = sylvain.benner@gmail.com
+	name = syl20bnr
+[credential]
+	helper = store
+[push]
+	default = matching
