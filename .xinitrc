@@ -5,5 +5,7 @@ export PATH=${PATH}\
 :/usr/local/bin\
 :/opt/local/bin\
 :/Users/sylvain/.i3ci/bin
+export LANG=en_GB.UTF-8
 
+# the best wm :-)
 exec i3
