@@ -29,8 +29,7 @@ set $i3cibin ~/.i3ci/bin
 # force an update of the i3 status bar
 set $updatebar killall -USR1 i3status
 # wallpaper
-set $wallpaper feh --bg-fill ~/.img/green_mountains_in_the_morning-wallpaper-1280x800.jpg
-#set $wallpaper feh --bg-fill ~/.img/space_shuttle_discovery-wide.jpg
+set $wallpaper feh --bg-fill /Library/Desktop\ Pictures/Galaxy.jpg
 
 # ========================================================================
 #                             System Preferences
