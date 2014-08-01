@@ -51,3 +51,5 @@ alias rr=ranger
 alias np=noproxy
 # force english language for git
 alias git='env LC_ALL=en_US git'
+# print recent history item backward
+alias history='history | tac'
