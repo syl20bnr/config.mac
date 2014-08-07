@@ -14,6 +14,7 @@ function my_fish_key_bindings
   bind \co 'ranger-cd ; fish_prompt'  
 end
 set fish_key_bindings my_fish_key_bindings
+xset r rate 250 40
 
 # ----------------------------------------------------------------------------
 # Environment
@@ -43,13 +44,13 @@ if test -e $RBENV_ROOT/bin/rbenv
   . (rbenv init -|psub)
 end
 
+# force english language
+set -x LC_ALL en_GB.UTF-8
+
 # ----------------------------------------------------------------------------
 # aliases
 # ----------------------------------------------------------------------------
 # rr instead of just 'r' since r is already taken by R
 alias rr=ranger
 alias np=noproxy
-# force english language for git
-alias git='env LC_ALL=en_US git'
-# print recent history item backward
-alias history='history | tac'
+
