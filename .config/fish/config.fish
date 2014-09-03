@@ -53,4 +53,5 @@ set -x LC_ALL en_GB.UTF-8
 # rr instead of just 'r' since r is already taken by R
 alias rr=ranger
 alias np=noproxy
-
+# print recent history item backward
+alias h='history | tac'
