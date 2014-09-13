@@ -1,7 +1,7 @@
 URxvt.perl-lib: /Users/sylvain/.urxvt/urxvt-perls
 URxvt.scrollBar: False
 URxvt.geometry: 80x24
-URxvt.font: xft:DejaVu Sans Mono:size=10
+URxvt.font: xft:Menlo:size=10
 URxvt.letterSpace: 0
 URxvt.perl-ext-common: default,keyboard-select,url-select,clipboard
 URxvt.keysym.M-Escape: perl:keyboard-select:activate
@@ -10,9 +10,10 @@ URxvt.keysym.M-u: perl:url-select:select_next
 URxvt.url-select.underline: true
 Xft*dpi: 96
 Xft*antialias: true
+Xft*hinting: true
 Xft.hintstyle: hintslight
-Xft.lcdfilter: lcdnone
-Xft.rgba: none
+Xft.lcdfilter: lcddefault
+Xft.rgba: rgb
 URxvt.transparent: true
 URxvt.tintColor: white
 URxvt.shading: 18
