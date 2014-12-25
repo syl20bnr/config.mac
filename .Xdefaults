@@ -1,7 +1,9 @@
 URxvt.perl-lib: /Users/sylvain/.urxvt/urxvt-perls
 URxvt.scrollBar: False
 URxvt.geometry: 80x24
-URxvt.font: xft:Menlo:size=10
+! URxvt.font: xft:Menlo:size=10
+URxvt.font: xft:Source Code Pro:pixelsize=13, \
+            xft:Apple SD Gothic Neo:pixelsize=9:antialias=true
 URxvt.letterSpace: 0
 URxvt.perl-ext-common: default,keyboard-select,url-select,clipboard
 URxvt.keysym.M-Escape: perl:keyboard-select:activate
