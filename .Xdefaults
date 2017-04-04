@@ -1,9 +1,8 @@
 URxvt.perl-lib: /Users/sylvain/.urxvt/urxvt-perls
 URxvt.scrollBar: False
 URxvt.geometry: 80x24
-! URxvt.font: xft:Menlo:size=10
-URxvt.font: xft:Source Code Pro:pixelsize=13, \
-            xft:Apple SD Gothic Neo:pixelsize=9:antialias=true
+!urxvt.font: xft:Source Code Pro:pixelsize=13:antialias=true
+URxvt*font: xft:Input:pixelsize=13:antialias=true:hinting=true,xft:Source\ Code\ Pro\ for\ Powerline:pixelsize=13:antialias=true:hinting=true
 URxvt.letterSpace: 0
 URxvt.perl-ext-common: default,keyboard-select,url-select,clipboard
 URxvt.keysym.M-Escape: perl:keyboard-select:activate
@@ -20,6 +19,9 @@ URxvt.transparent: true
 URxvt.tintColor: white
 URxvt.shading: 18
 URxvt*fading: 32
+
+UXTerm*faceName: Source Code Pro for Powerline
+UXTerm*faceSize: 10
 
 ! ----------------------------------------------------------------------------
 !-- Solarized dark Color Scheme
@@ -63,7 +65,7 @@ URxvt*fading: 32
 
 *foreground:   #efefef
 *background:   #000000
-! CursorColor (Selection)
+               ! CursorColor (Selection)
 *cursorColor:  #d6d6d6
 ! Black + Grey (Comment)
 *color0:       #000000
